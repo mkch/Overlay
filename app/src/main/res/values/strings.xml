@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Overlay</string>
+    <string name="rotation">Rotation</string>
+    <string name="force_rotation">Force retotion</string>
+    <string name="immersive">Immersive mode</string>
+    <string name="force_immersive">Force immersive mode</string>
+    <string name="permission_denied">Permission denied!</string>
+    <string name="blue_filter">Blue filter</string>
+    <string name="blue_filter_level">Filter level</string>
+    <string name="running">Running&#8230;</string>
+</resources>
