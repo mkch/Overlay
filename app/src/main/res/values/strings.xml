@@ -8,4 +8,6 @@
     <string name="blue_filter">Blue filter</string>
     <string name="blue_filter_level">Filter level</string>
     <string name="running">Running&#8230;</string>
+    <string name="screen_on">Screen on</string>
+    <string name="keep_screen_on">Keep screen on</string>
 </resources>

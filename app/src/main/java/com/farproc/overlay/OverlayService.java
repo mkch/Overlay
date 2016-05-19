@@ -86,6 +86,7 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
         final boolean forceImmersive = mPrefs.getBoolean(SettingsActivity.PREF_KEY_FORCE_IMMERSIVE, false);
         final boolean forceRotation = mPrefs.getBoolean(SettingsActivity.PREF_KEY_FORCE_ROTATION, false);
         final boolean blueFilterOn = mPrefs.getBoolean(SettingsActivity.PREF_KEY_BLUE_FILTER, false);
+        final boolean keepScreenOn = mPrefs.getBoolean(SettingsActivity.PREF_KEY_KEEP_SCREEN_ON, false);
         if(forceImmersive) {
             uiVisibility = //View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                     View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
@@ -115,6 +116,10 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
             } else {
                 // All flags needed is already set.
             }
+        }
+
+        if(keepScreenOn) {
+            flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
         }
 
         mOverlayView.setSystemUiVisibility(uiVisibility);
@@ -170,9 +175,11 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
             case SettingsActivity.PREF_KEY_FORCE_IMMERSIVE:
             case SettingsActivity.PREF_KEY_FORCE_ROTATION:
             case SettingsActivity.PREF_KEY_BLUE_FILTER:
+            case SettingsActivity.PREF_KEY_KEEP_SCREEN_ON:
                 if(sharedPreferences.getBoolean(SettingsActivity.PREF_KEY_FORCE_IMMERSIVE, false) == false &&
                         sharedPreferences.getBoolean(SettingsActivity.PREF_KEY_FORCE_ROTATION, false) == false &&
-                        sharedPreferences.getBoolean(SettingsActivity.PREF_KEY_BLUE_FILTER, false) == false) {
+                        sharedPreferences.getBoolean(SettingsActivity.PREF_KEY_BLUE_FILTER, false) == false &&
+                        sharedPreferences.getBoolean(SettingsActivity.PREF_KEY_KEEP_SCREEN_ON, false)) {
                     stopSelf();
                 } else {
                     setupOverlay();

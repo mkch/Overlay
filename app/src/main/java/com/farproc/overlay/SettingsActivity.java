@@ -20,6 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String PREF_KEY_FORCE_ROTATION = "pref_key_force_rotation";
     public static final String PREF_KEY_BLUE_FILTER = "pref_key_blue_filter";
     public static final String PREF_KEY_BLUE_FILTER_LEVEL = "pref_key_blue_filter_level";
+    public static final String PREF_KEY_KEEP_SCREEN_ON = "pref_key_keep_screen_on";
 
     public static class PrefsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
@@ -92,6 +93,8 @@ public class SettingsActivity extends AppCompatActivity {
             blueFilterLevel.setOnDialogClosedListener(mBlueFilterLevelListener);
             blueFilterLevel.setEnabled(prefs.getBoolean(PREF_KEY_BLUE_FILTER, false));
 
+            findPreference(PREF_KEY_KEEP_SCREEN_ON).setOnPreferenceChangeListener(this);
+
             startOverlayServiceIfNeeded(getActivity());
         }
 
@@ -111,6 +114,7 @@ public class SettingsActivity extends AppCompatActivity {
                 case PREF_KEY_FORCE_IMMERSIVE:
                 case PREF_KEY_FORCE_ROTATION:
                 case PREF_KEY_BLUE_FILTER:
+                case PREF_KEY_KEEP_SCREEN_ON:
                     if((boolean)newValue) {
                         startOverlayService(activity);
                     }
