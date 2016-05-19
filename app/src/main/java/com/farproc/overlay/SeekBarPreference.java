@@ -33,6 +33,19 @@ public class SeekBarPreference extends DialogPreference implements OnSeekBarChan
     	final int value = getValue();
     	setDialogTitle(getDialogTitleWithPercentage(value));
     	super.showDialog(state);
+        if(mOnShowDialogListener != null) {
+            mOnShowDialogListener.onShowDialog();
+        }
+    }
+
+    public interface OnShowDialogListener {
+        public void onShowDialog();
+    }
+
+    private OnShowDialogListener mOnShowDialogListener;
+
+    public void setOnShowDialogListener(OnShowDialogListener l) {
+        mOnShowDialogListener = l;
     }
 
 	private int getValue() {

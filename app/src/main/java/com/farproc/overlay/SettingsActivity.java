@@ -31,7 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
             setupPreferences();
         }
 
-        private class BlueFilterLevelOnChangeListener implements SeekBar.OnSeekBarChangeListener {
+        private class BlueFilterLevelListener implements SeekBar.OnSeekBarChangeListener, SeekBarPreference.OnShowDialogListener, SeekBarPreference.OnDialogClosedListener {
 
             private OverlayService mService;
             private ServiceConnection mConn = new ServiceConnection() {
@@ -55,16 +55,26 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                final Activity activity = getActivity();
-                activity.bindService(new Intent(activity, OverlayService.class), mConn, 0);
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onDialogClosed(boolean positiveResult) {
                 final Activity activity = getActivity();
                 activity.unbindService(mConn);
             }
+
+            @Override
+            public void onShowDialog() {
+                final Activity activity = getActivity();
+                activity.bindService(new Intent(activity, OverlayService.class), mConn, 0);
+            }
         }
+
+        private BlueFilterLevelListener mBlueFilterLevelListener = new BlueFilterLevelListener();
 
         private void setupPreferences() {
             findPreference(PREF_KEY_FORCE_IMMERSIVE).setOnPreferenceChangeListener(this);
@@ -77,27 +87,9 @@ public class SettingsActivity extends AppCompatActivity {
             }
             final SeekBarPreference blueFilterLevel = (SeekBarPreference)findPreference(PREF_KEY_BLUE_FILTER_LEVEL);
             blueFilterLevel.setOnPreferenceChangeListener(this);
-            blueFilterLevel.setOnSeekbarChangedListener(new BlueFilterLevelOnChangeListener());
-            blueFilterLevel.setOnDialogClosedListener(new SeekBarPreference.OnDialogClosedListener() {
-                @Override
-                public void onDialogClosed(boolean positiveResult) {
-                    if(!positiveResult) {
-                        final Activity activity = getActivity();
-                        activity.bindService(new Intent(activity, OverlayService.class), new ServiceConnection() {
-                            @Override
-                            public void onServiceConnected(ComponentName name, IBinder service) {
-                                final OverlayService svr = ((OverlayService.LocalBinder)service).getService();
-                                svr.setBlueFilterLevel(prefs.getInt(PREF_KEY_BLUE_FILTER_LEVEL, 50));
-                                activity.unbindService(this);
-                            }
-
-                            @Override
-                            public void onServiceDisconnected(ComponentName name) {
-                            }
-                        }, 0);
-                    }
-                }
-            });
+            blueFilterLevel.setOnSeekbarChangedListener(mBlueFilterLevelListener);
+            blueFilterLevel.setOnShowDialogListener(mBlueFilterLevelListener);
+            blueFilterLevel.setOnDialogClosedListener(mBlueFilterLevelListener);
             blueFilterLevel.setEnabled(prefs.getBoolean(PREF_KEY_BLUE_FILTER, false));
 
             startOverlayServiceIfNeeded(getActivity());
