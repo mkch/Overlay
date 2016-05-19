@@ -47,7 +47,9 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
         mWindowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mPrefs.registerOnSharedPreferenceChangeListener(this);
+        // NOTE: Adding ACTION_SCREEN_ON and ACTION_USER_PRESENT in a single IntentFilter does not work.
         registerReceiver(mScreenOnReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
+        registerReceiver(mUserPresentReceiver, new IntentFilter(Intent.ACTION_USER_PRESENT));
         setupOverlay();
 
         final Intent settingsIntent = new Intent(this, SettingsActivity.class);
@@ -144,16 +146,21 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
         super.onDestroy();
         mPrefs.unregisterOnSharedPreferenceChangeListener(this);
         unregisterReceiver(mScreenOnReceiver);
+        unregisterReceiver(mUserPresentReceiver);
         stopOverlay();
     }
+
+    private BroadcastReceiver mUserPresentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            setupOverlay();
+        }
+    };
 
     private BroadcastReceiver mScreenOnReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(mPrefs.getBoolean(SettingsActivity.PREF_KEY_FORCE_IMMERSIVE, false) &&
-                    intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                setupOverlay();
-            }
+            setupOverlay();
         }
     };
 
