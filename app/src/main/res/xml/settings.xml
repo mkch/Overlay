@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="@string/rotation">
-        <CheckBoxPreference
-            android:key="pref_key_force_rotation"
-            android:title="@string/force_rotation"
-            android:defaultValue="false" />
-    </PreferenceCategory>
+    <CheckBoxPreference
+        android:key="pref_key_force_rotation"
+        android:title="@string/force_rotation"
+        android:defaultValue="false" />
 
-    <PreferenceCategory
-        android:title="@string/immersive">
-        <CheckBoxPreference
-            android:key="pref_key_force_immersive"
-            android:title="@string/force_immersive"
-            android:defaultValue="false" />
-    </PreferenceCategory>
+    <CheckBoxPreference
+        android:key="pref_key_force_immersive"
+        android:title="@string/force_immersive"
+        android:defaultValue="false" />
+
+    <CheckBoxPreference
+        android:key="pref_key_keep_screen_on"
+        android:title="@string/keep_screen_on"
+        android:defaultValue="false" />
 
     <PreferenceCategory
         android:title="@string/blue_filter">
@@ -24,15 +23,8 @@
             android:defaultValue="false" />
         <com.farproc.overlay.SeekBarPreference
             android:key="pref_key_blue_filter_level"
-            android:title="@string/blue_filter_level" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/screen_on">
-        <CheckBoxPreference
-            android:key="pref_key_keep_screen_on"
-            android:title="@string/keep_screen_on"
-            android:defaultValue="false" />
+            android:title="@string/blue_filter_level"
+            android:dependency="pref_key_blue_filter"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

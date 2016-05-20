@@ -91,7 +91,7 @@ public class SettingsActivity extends AppCompatActivity {
             blueFilterLevel.setOnSeekbarChangedListener(mBlueFilterLevelListener);
             blueFilterLevel.setOnShowDialogListener(mBlueFilterLevelListener);
             blueFilterLevel.setOnDialogClosedListener(mBlueFilterLevelListener);
-            blueFilterLevel.setEnabled(prefs.getBoolean(PREF_KEY_BLUE_FILTER, false));
+            //blueFilterLevel.setEnabled(prefs.getBoolean(PREF_KEY_BLUE_FILTER, false));
 
             findPreference(PREF_KEY_KEEP_SCREEN_ON).setOnPreferenceChangeListener(this);
 
@@ -117,9 +117,6 @@ public class SettingsActivity extends AppCompatActivity {
                 case PREF_KEY_KEEP_SCREEN_ON:
                     if((boolean)newValue) {
                         startOverlayService(activity);
-                    }
-                    if(preference.getKey().equals(PREF_KEY_BLUE_FILTER)) {
-                        findPreference(PREF_KEY_BLUE_FILTER_LEVEL).setEnabled((boolean)newValue);
                     }
                     break;
                 case PREF_KEY_BLUE_FILTER_LEVEL:
