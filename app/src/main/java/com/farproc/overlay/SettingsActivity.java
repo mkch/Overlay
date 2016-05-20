@@ -16,6 +16,8 @@ import android.widget.SeekBar;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    public static final String ACTION_TURN_OFF = "com.farproc.overlay.action.TURN_OFF";
+
     public static final String PREF_KEY_FORCE_IMMERSIVE = "pref_key_force_immersive";
     public static final String PREF_KEY_FORCE_ROTATION = "pref_key_force_rotation";
     public static final String PREF_KEY_BLUE_FILTER = "pref_key_blue_filter";

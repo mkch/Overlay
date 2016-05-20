@@ -50,6 +50,7 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
         // NOTE: Adding ACTION_SCREEN_ON and ACTION_USER_PRESENT in a single IntentFilter does not work.
         registerReceiver(mScreenOnReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
         registerReceiver(mUserPresentReceiver, new IntentFilter(Intent.ACTION_USER_PRESENT));
+        registerReceiver(mTurnOffReceiver, new IntentFilter(SettingsActivity.ACTION_TURN_OFF));
         setupOverlay();
 
         final Intent settingsIntent = new Intent(this, SettingsActivity.class);
@@ -60,6 +61,7 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
                 .setContentText(getString(R.string.running))
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(PendingIntent.getActivity(this, 0, settingsIntent, PendingIntent.FLAG_CANCEL_CURRENT))
+                .addAction(0, getString(R.string.turn_off), PendingIntent.getBroadcast(this, 0, new Intent(SettingsActivity.ACTION_TURN_OFF), 0))
                 .build();
         this.startForeground(SERVICE_NOTIFICATION_ID, nt);
     }
@@ -152,6 +154,7 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
         mPrefs.unregisterOnSharedPreferenceChangeListener(this);
         unregisterReceiver(mScreenOnReceiver);
         unregisterReceiver(mUserPresentReceiver);
+        unregisterReceiver(mTurnOffReceiver);
         stopOverlay();
     }
 
@@ -166,6 +169,15 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
         @Override
         public void onReceive(Context context, Intent intent) {
             setupOverlay();
+        }
+    };
+
+    private BroadcastReceiver mTurnOffReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            PreferenceManager.getDefaultSharedPreferences(context).edit()
+                    .putBoolean(SettingsActivity.PREF_KEY_MASTER_SWITCH, false)
+                    .commit();
         }
     };
 

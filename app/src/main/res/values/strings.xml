@@ -9,4 +9,5 @@
     <string name="master_switch">Master switch</string>
     <string name="action_on">ON</string>
     <string name="action_off">OFF</string>
+    <string name="turn_off">Turn OFF</string>
 </resources>
