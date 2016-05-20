@@ -21,6 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
     public static final String PREF_KEY_BLUE_FILTER = "pref_key_blue_filter";
     public static final String PREF_KEY_BLUE_FILTER_LEVEL = "pref_key_blue_filter_level";
     public static final String PREF_KEY_KEEP_SCREEN_ON = "pref_key_keep_screen_on";
+    public static final String PREF_KEY_MASTER_SWITCH = "pref_key_master_switch";
 
     public static class PrefsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
@@ -65,6 +66,9 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onDialogClosed(boolean positiveResult) {
                 final Activity activity = getActivity();
+                if(mService != null) {
+                    mService.setBlueFilterLevel(getPreferenceManager().getSharedPreferences().getInt(PREF_KEY_BLUE_FILTER_LEVEL, 50));
+                }
                 activity.unbindService(mConn);
             }
 
@@ -78,6 +82,7 @@ public class SettingsActivity extends AppCompatActivity {
         private BlueFilterLevelListener mBlueFilterLevelListener = new BlueFilterLevelListener();
 
         private void setupPreferences() {
+            findPreference(PREF_KEY_MASTER_SWITCH).setOnPreferenceChangeListener(this);
             findPreference(PREF_KEY_FORCE_IMMERSIVE).setOnPreferenceChangeListener(this);
             findPreference(PREF_KEY_FORCE_ROTATION).setOnPreferenceChangeListener(this);
             findPreference(PREF_KEY_BLUE_FILTER).setOnPreferenceChangeListener(this);
@@ -100,9 +105,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         public static void startOverlayServiceIfNeeded(Context context) {
             final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-            if(prefs.getBoolean(PREF_KEY_FORCE_IMMERSIVE, false) ||
+            if(prefs.getBoolean(PREF_KEY_MASTER_SWITCH, false) &&
+                    (prefs.getBoolean(PREF_KEY_FORCE_IMMERSIVE, false) ||
                     prefs.getBoolean(PREF_KEY_FORCE_ROTATION, false) ||
-                    prefs.getBoolean(PREF_KEY_BLUE_FILTER, false)) {
+                    prefs.getBoolean(PREF_KEY_BLUE_FILTER, false) ||
+                    prefs.getBoolean(PREF_KEY_KEEP_SCREEN_ON, false))) {
                 startOverlayService(context);
             }
         }
@@ -110,17 +117,25 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             final Activity activity = getActivity();
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
             switch(preference.getKey()) {
+                case PREF_KEY_MASTER_SWITCH:
+                    if((boolean)newValue &&
+                            (prefs.getBoolean(PREF_KEY_FORCE_IMMERSIVE, false) ||
+                                prefs.getBoolean(PREF_KEY_FORCE_ROTATION, false) ||
+                                prefs.getBoolean(PREF_KEY_BLUE_FILTER, false) ||
+                                prefs.getBoolean(PREF_KEY_KEEP_SCREEN_ON, false))) {
+                            startOverlayService(activity);
+                        }
+                    break;
                 case PREF_KEY_FORCE_IMMERSIVE:
                 case PREF_KEY_FORCE_ROTATION:
                 case PREF_KEY_BLUE_FILTER:
                 case PREF_KEY_KEEP_SCREEN_ON:
-                    if((boolean)newValue) {
+                    if((boolean)newValue && prefs.getBoolean(PREF_KEY_MASTER_SWITCH, false)) {
                         startOverlayService(activity);
                     }
                     break;
-                case PREF_KEY_BLUE_FILTER_LEVEL:
-                    startOverlayService(activity);
             }
             return true;
         }
@@ -140,5 +155,6 @@ public class SettingsActivity extends AppCompatActivity {
                 .commit();
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
     }
+
 }
 

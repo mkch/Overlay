@@ -172,14 +172,16 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         switch(key) {
+            case SettingsActivity.PREF_KEY_MASTER_SWITCH:
             case SettingsActivity.PREF_KEY_FORCE_IMMERSIVE:
             case SettingsActivity.PREF_KEY_FORCE_ROTATION:
             case SettingsActivity.PREF_KEY_BLUE_FILTER:
             case SettingsActivity.PREF_KEY_KEEP_SCREEN_ON:
-                if(sharedPreferences.getBoolean(SettingsActivity.PREF_KEY_FORCE_IMMERSIVE, false) == false &&
+                if(sharedPreferences.getBoolean(SettingsActivity.PREF_KEY_MASTER_SWITCH, false) == false ||
+                        (sharedPreferences.getBoolean(SettingsActivity.PREF_KEY_FORCE_IMMERSIVE, false) == false &&
                         sharedPreferences.getBoolean(SettingsActivity.PREF_KEY_FORCE_ROTATION, false) == false &&
                         sharedPreferences.getBoolean(SettingsActivity.PREF_KEY_BLUE_FILTER, false) == false &&
-                        sharedPreferences.getBoolean(SettingsActivity.PREF_KEY_KEEP_SCREEN_ON, false) == false) {
+                        sharedPreferences.getBoolean(SettingsActivity.PREF_KEY_KEEP_SCREEN_ON, false) == false)) {
                     stopSelf();
                 } else {
                     setupOverlay();

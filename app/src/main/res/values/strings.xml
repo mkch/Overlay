@@ -6,4 +6,7 @@
     <string name="blue_filter_level">Filter level</string>
     <string name="running">Running&#8230;</string>
     <string name="keep_screen_on">Keep screen on</string>
+    <string name="master_switch">Master switch</string>
+    <string name="action_on">ON</string>
+    <string name="action_off">OFF</string>
 </resources>
