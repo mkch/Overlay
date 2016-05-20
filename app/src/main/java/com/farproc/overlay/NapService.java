@@ -45,10 +45,10 @@ public class NapService extends Service implements SharedPreferences.OnSharedPre
         this.startForeground(NAP_SERVICE_NOTIFICATION_ID, nt);
         registerReceiver(mCancelReceiver, new IntentFilter(ACTION_CANCEL_NAP));
         mPrefs.registerOnSharedPreferenceChangeListener(this);
-        sHandler.postDelayed(mNapRunnable, 10*1000);
+        sHandler.postDelayed(mEndNapRunnable, 10*1000);
     }
 
-    private Runnable mNapRunnable = new Runnable() {
+    private Runnable mEndNapRunnable = new Runnable() {
         @Override
         public void run() {
             mPrefs.edit()
@@ -69,14 +69,15 @@ public class NapService extends Service implements SharedPreferences.OnSharedPre
     private BroadcastReceiver mCancelReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            sHandler.removeCallbacks(mNapRunnable);
-            stopSelf();
+            sHandler.removeCallbacks(mEndNapRunnable);
+            mEndNapRunnable.run();
         }
     };
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if(SettingsActivity.PREF_KEY_MASTER_SWITCH.equals(key)) {
+            sHandler.removeCallbacks(mEndNapRunnable);
             stopSelf();
         }
     }
