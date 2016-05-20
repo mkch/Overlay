@@ -21,6 +21,9 @@ import android.view.WindowManager;
 
 
 public class OverlayService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private static final String ACTION_NAP_FOR_10_SEC = "com.farproc.overlay.action.NAP_FOR_10_SEC";
+
     private WindowManager mWindowManager;
     private View mOverlayView;
     private SharedPreferences mPrefs;
@@ -50,7 +53,9 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
         // NOTE: Adding ACTION_SCREEN_ON and ACTION_USER_PRESENT in a single IntentFilter does not work.
         registerReceiver(mScreenOnReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
         registerReceiver(mUserPresentReceiver, new IntentFilter(Intent.ACTION_USER_PRESENT));
-        registerReceiver(mTurnOffReceiver, new IntentFilter(SettingsActivity.ACTION_TURN_OFF));
+        final IntentFilter turnOffIntent = new IntentFilter(SettingsActivity.ACTION_TURN_OFF);
+        turnOffIntent.addAction(ACTION_NAP_FOR_10_SEC);
+        registerReceiver(mTurnOffReceiver, turnOffIntent);
         setupOverlay();
 
         final Intent settingsIntent = new Intent(this, SettingsActivity.class);
@@ -62,6 +67,7 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(PendingIntent.getActivity(this, 0, settingsIntent, PendingIntent.FLAG_CANCEL_CURRENT))
                 .addAction(0, getString(R.string.turn_off), PendingIntent.getBroadcast(this, 0, new Intent(SettingsActivity.ACTION_TURN_OFF), 0))
+                .addAction(0, getString(R.string.nap_for_10_sec), PendingIntent.getBroadcast(this, 0, new Intent(ACTION_NAP_FOR_10_SEC), 0))
                 .build();
         this.startForeground(SERVICE_NOTIFICATION_ID, nt);
     }
@@ -178,6 +184,9 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
             PreferenceManager.getDefaultSharedPreferences(context).edit()
                     .putBoolean(SettingsActivity.PREF_KEY_MASTER_SWITCH, false)
                     .commit();
+            if(ACTION_NAP_FOR_10_SEC.equals(intent.getAction())) {
+                context.startService(new Intent(context, NapService.class));
+            }
         }
     };
 

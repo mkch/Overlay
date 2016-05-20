@@ -10,4 +10,7 @@
     <string name="action_on">ON</string>
     <string name="action_off">OFF</string>
     <string name="turn_off">Turn OFF</string>
+    <string name="nap_for_10_sec">Nap for 10 sec.</string>
+    <string name="cancel">Cancel</string>
+    <string name="napping">Napping&#8230;</string>
 </resources>

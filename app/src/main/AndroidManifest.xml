@@ -22,6 +22,7 @@
         </activity>
 
         <service android:name=".OverlayService" />
+        <service android:name=".NapService" />
 
         <receiver android:name=".BootReceiver">
             <intent-filter>
