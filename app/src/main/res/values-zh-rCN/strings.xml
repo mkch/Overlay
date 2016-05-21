@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Overlay</string>
+    <string name="action_off">关</string>
+    <string name="action_on">开</string>
+    <string name="blue_filter">蓝光过滤</string>
+    <string name="blue_filter_level">过滤级别</string>
+    <string name="cancel">取消</string>
+    <string name="force_immersive">强制沉浸模式</string>
+    <string name="force_rotation">强制屏幕旋转</string>
+    <string name="keep_screen_on">保持屏幕常亮</string>
+    <string name="master_switch">开关</string>
+    <string name="nap_for_10_sec">暂停10秒</string>
+    <string name="napping">暂停…</string>
+    <string name="running">运行中…</string>
+    <string name="turn_off">关闭</string>
+</resources>
