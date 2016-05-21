@@ -181,7 +181,7 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
     private BroadcastReceiver mTurnOffReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            PreferenceManager.getDefaultSharedPreferences(context).edit()
+            mPrefs.edit()
                     .putBoolean(SettingsActivity.PREF_KEY_MASTER_SWITCH, false)
                     .commit();
             if(ACTION_NAP_FOR_10_SEC.equals(intent.getAction())) {

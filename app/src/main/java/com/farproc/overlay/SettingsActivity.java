@@ -46,6 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void onResume() {
             super.onResume();
             mPrefs.registerOnSharedPreferenceChangeListener(this);
+            getActivity().invalidateOptionsMenu();
         }
 
         @Override
@@ -56,15 +57,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
-            getActivity().getMenuInflater().inflate(R.menu.settings_opt, menu);
-        }
-
-        @Override
-        public void onPrepareOptionsMenu (Menu menu) {
+            inflater.inflate(R.menu.settings_opt, menu);
             final Switch masterSwitch = (Switch) menu.findItem(R.id.master_switch).getActionView();
-            final boolean masterSwitchOn = mPrefs.getBoolean(PREF_KEY_MASTER_SWITCH, false);
-            masterSwitch.setChecked(masterSwitchOn);
-            masterSwitch.setText(masterSwitchOn ? R.string.action_on : R.string.action_off);
+            // Disables saving instance state of switch to avoid inconsistent state of the switch and
+            // the SharedPreferences caused by saved instance state.
+            masterSwitch.setSaveEnabled(false);
             masterSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -74,6 +71,14 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+
+        @Override
+        public void onPrepareOptionsMenu (Menu menu) {
+            final Switch masterSwitch = (Switch) menu.findItem(R.id.master_switch).getActionView();
+            final boolean masterSwitchOn = mPrefs.getBoolean(PREF_KEY_MASTER_SWITCH, false);
+            masterSwitch.setChecked(masterSwitchOn);
+            masterSwitch.setText(masterSwitchOn ? R.string.action_on : R.string.action_off);
         }
 
         @Override
