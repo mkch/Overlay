@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 
 public class NapService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -22,7 +21,6 @@ public class NapService extends Service implements SharedPreferences.OnSharedPre
 
     private SharedPreferences mPrefs;
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
