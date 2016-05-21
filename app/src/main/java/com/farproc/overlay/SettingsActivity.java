@@ -47,6 +47,7 @@ public class SettingsActivity extends AppCompatActivity {
             super.onResume();
             mPrefs.registerOnSharedPreferenceChangeListener(this);
             getActivity().invalidateOptionsMenu();
+            setPreferencesEnabledState(mPrefs.getBoolean(PREF_KEY_MASTER_SWITCH, false));
         }
 
         @Override
@@ -62,6 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
             // Disables saving instance state of switch to avoid inconsistent state of the switch and
             // the SharedPreferences caused by saved instance state.
             masterSwitch.setSaveEnabled(false);
+            masterSwitch.setChecked(false);
             masterSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -87,10 +89,7 @@ public class SettingsActivity extends AppCompatActivity {
                 case PREF_KEY_MASTER_SWITCH: {
                     getActivity().invalidateOptionsMenu();
                     final boolean masterSwitchOn = prefs.getBoolean(key, false);
-                    findPreference(PREF_KEY_FORCE_IMMERSIVE).setEnabled(masterSwitchOn);
-                    findPreference(PREF_KEY_FORCE_ROTATION).setEnabled(masterSwitchOn);
-                    findPreference(PREF_KEY_KEEP_SCREEN_ON).setEnabled(masterSwitchOn);
-                    findPreference(PREF_KEY_BLUE_FILTER).setEnabled(masterSwitchOn);
+                    setPreferencesEnabledState(masterSwitchOn);
                     // No break here.
                 }
                 case PREF_KEY_FORCE_IMMERSIVE:
@@ -106,6 +105,13 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                     break;
             }
+        }
+
+        private void setPreferencesEnabledState(boolean masterSwitchOn) {
+            findPreference(PREF_KEY_FORCE_IMMERSIVE).setEnabled(masterSwitchOn);
+            findPreference(PREF_KEY_FORCE_ROTATION).setEnabled(masterSwitchOn);
+            findPreference(PREF_KEY_KEEP_SCREEN_ON).setEnabled(masterSwitchOn);
+            findPreference(PREF_KEY_BLUE_FILTER).setEnabled(masterSwitchOn);
         }
 
         private class BlueFilterLevelListener implements SeekBar.OnSeekBarChangeListener, SeekBarPreference.OnShowDialogListener, SeekBarPreference.OnDialogClosedListener {
