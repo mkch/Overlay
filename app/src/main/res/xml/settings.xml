@@ -1,37 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <SwitchPreference
-        android:key="pref_key_master_switch"
-        android:title="@string/master_switch"
-        android:defaultValue="false"
-        android:summaryOff="@string/action_off"
-        android:summaryOn="@string/action_on"
-        />
     <CheckBoxPreference
         android:key="pref_key_force_rotation"
         android:title="@string/force_rotation"
-        android:defaultValue="false"
-        android:dependency="pref_key_master_switch"/>
+        android:defaultValue="false"/>
 
     <CheckBoxPreference
         android:key="pref_key_force_immersive"
         android:title="@string/force_immersive"
-        android:defaultValue="false"
-        android:dependency="pref_key_master_switch"/>
+        android:defaultValue="false"/>
 
     <CheckBoxPreference
         android:key="pref_key_keep_screen_on"
         android:title="@string/keep_screen_on"
-        android:defaultValue="false"
-        android:dependency="pref_key_master_switch"/>
+        android:defaultValue="false"/>
 
     <PreferenceCategory
         android:title="@string/blue_filter">
         <CheckBoxPreference
             android:key="pref_key_blue_filter"
             android:title="@string/blue_filter"
-            android:defaultValue="false"
-            android:dependency="pref_key_master_switch"/>
+            android:defaultValue="false"/>
         <com.farproc.overlay.SeekBarPreference
             android:key="pref_key_blue_filter_level"
             android:title="@string/blue_filter_level"
