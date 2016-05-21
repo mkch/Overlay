@@ -14,7 +14,6 @@ import android.graphics.PixelFormat;
 import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -36,7 +35,6 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
 
     private LocalBinder mLocalBinder = new LocalBinder();
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return mLocalBinder;

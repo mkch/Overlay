@@ -10,14 +10,13 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends Activity {
 
     public static final String ACTION_TURN_OFF = "com.farproc.overlay.action.TURN_OFF";
 
