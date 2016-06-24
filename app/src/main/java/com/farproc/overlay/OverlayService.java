@@ -14,9 +14,9 @@ import android.graphics.PixelFormat;
 import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 
 public class OverlayService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -83,7 +83,7 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
     private void setupOverlay() {
         final boolean overlayViewAdded = mOverlayView != null;
         if(!overlayViewAdded) {
-            mOverlayView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.overlay, null);
+            mOverlayView = new FrameLayout(this);
         }
         int flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
         int orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
