@@ -131,8 +131,21 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
         mOverlayView.setSystemUiVisibility(uiVisibility);
         mOverlayView.setBackgroundColor(backgroundColor);
 
+        int width = WindowManager.LayoutParams.MATCH_PARENT;
+        int height = WindowManager.LayoutParams.MATCH_PARENT;
+
+        // Do not cover the whole area of screen if not necessary.
+        // Setting height and width to MATCH_PARENT prevents user from changing app permissions.
+        if(!blueFilterOn) {
+            // 0 does not work well.
+            // The overlay view will be placed at the bottom right corner with a fixed size
+            // after blue filter is switched off, if width and height are set 0.
+            width = 1;
+            height = 1;
+        }
+
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT,
+                width, height,
                 WindowManager.LayoutParams.TYPE_TOAST,
                 flags,
                 PixelFormat.TRANSLUCENT);
