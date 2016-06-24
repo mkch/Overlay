@@ -14,9 +14,9 @@ import android.graphics.PixelFormat;
 import android.os.Binder;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 
 public class OverlayService extends Service implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -83,7 +83,7 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
     private void setupOverlay() {
         final boolean overlayViewAdded = mOverlayView != null;
         if(!overlayViewAdded) {
-            mOverlayView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.overlay, null);
+            mOverlayView = new FrameLayout(this);
         }
         int flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
         int orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
@@ -131,8 +131,21 @@ public class OverlayService extends Service implements SharedPreferences.OnShare
         mOverlayView.setSystemUiVisibility(uiVisibility);
         mOverlayView.setBackgroundColor(backgroundColor);
 
+        int width = WindowManager.LayoutParams.MATCH_PARENT;
+        int height = WindowManager.LayoutParams.MATCH_PARENT;
+
+        // Do not cover the whole area of screen if not necessary.
+        // Setting height and width to MATCH_PARENT prevents user from changing app permissions.
+        if(!blueFilterOn) {
+            // 0 does not work well.
+            // The overlay view will be placed at the bottom right corner with a fixed size
+            // after blue filter is switched off, if width and height are set 0.
+            width = 1;
+            height = 1;
+        }
+
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT,
+                width, height,
                 WindowManager.LayoutParams.TYPE_TOAST,
                 flags,
                 PixelFormat.TRANSLUCENT);
